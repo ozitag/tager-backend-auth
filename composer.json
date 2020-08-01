@@ -1,0 +1,24 @@
+{
+  "name": "ozitag/tager-backend-auth",
+  "description": "Base components for tager-backend",
+  "license": "MIT",
+  "homepage": "https://github.com/ozitag/tager-backend-auth",
+  "authors": [
+    {
+      "name": "Vital Ozierski <v.ozierski@ozitag.com>",
+      "email": "v.ozierski@ozitag.com",
+      "homepage": "https://ozitag.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.2.5",
+    "ozitag/tager-backend-core": "^1.2",
+    "laravel/passport": "^9.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "OZiTAG\\Tager\\Backend\\Auth\\": "src"
+    }
+  }
+}
