@@ -10,7 +10,7 @@ use OZiTAG\Tager\Backend\Auth\Observers\TokenObserver;
 use OZiTAG\Tager\Backend\Auth\Middlewares\Provider;
 use OZiTAG\Tager\Backend\Auth\Middlewares\Passport;
 
-class TagerBackendAuthServiceProvider extends EventServiceProvider
+class AuthServiceProvider extends EventServiceProvider
 {
 
     /**
