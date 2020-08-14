@@ -34,7 +34,6 @@ class AuthServiceProvider extends EventServiceProvider
         Token::addGlobalScope(new TokenProviderScope);
 
         app('router')->aliasMiddleware('passport', Passport::class);
-        app('router')->aliasMiddleware('provider', Provider::class);
 
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
     }
