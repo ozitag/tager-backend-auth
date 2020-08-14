@@ -4,6 +4,7 @@ namespace OZiTAG\Tager\Backend\Auth\Middlewares;
 
 use Closure;
 use Illuminate\Support\Facades\Config;
+use OZiTAG\Tager\Backend\Auth\Helpers\ProvidersHelper;
 
 class Passport
 {
@@ -15,16 +16,17 @@ class Passport
      * @param array $providers
      * @return mixed
      */
-    public function handle($request, Closure $next, $provider = null)
+    public function handle($request, Closure $next)
     {
-        $grantType = $request->get('grant_type');
+        $grantType = $request->get('grantType');
         $request->merge([
             'grant_type' => $grantType === 'refresh_token' ? $grantType : 'password'
         ]);
 
-        if($provider) {
-            Config::set('auth.guards.api.provider', $provider);
-        }
+        $provider = ProvidersHelper::getProviderFromAlias(
+            $request->route('provider')
+        );
+        Config::set('auth.guards.api.provider', $provider);
 
         return $next($request);
     }
