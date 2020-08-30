@@ -2,6 +2,7 @@
 
 namespace OZiTAG\Tager\Backend\Auth\Jobs;
 
+use Laravel\Passport\Bridge\Scope;
 use Laravel\Passport\Passport;
 use League\OAuth2\Server\AuthorizationServer;
 use OZiTAG\Tager\Backend\Auth\Grant;
@@ -23,7 +24,7 @@ class GetAccessTokenJob extends Job
     {
         $this->userId = $userId;
         $this->clientId = $clientId;
-        $this->scopes = $scopes;
+        $this->scopes = array_map(fn ($item) => new Scope($item), $scopes);
     }
 
     public function handle(Grant $grant, AuthorizationServer $authorizationServer)

@@ -28,9 +28,16 @@ class ValidateRefreshTokenJob extends Job
         $this->setEncryptionKey(app('encrypter')->getKey());
     }
 
-    public function handle(RefreshTokenRepository $repository) : array 
+    /**
+     * @param RefreshTokenRepository $repository
+     * @return array
+     * @throws OAuthServerException
+     */
+    public function handle(RefreshTokenRepository $repository) : array
     {
-        $refreshToken = $this->decrypt($this->refreshToken);
+        $refreshToken = $this->withExceptionHandler(
+            fn () => $this->decrypt($this->refreshToken)
+        );
         $refreshTokenData = json_decode($refreshToken, true);
 
         if ($refreshTokenData['client_id'] !== $this->clientId) {
@@ -44,7 +51,7 @@ class ValidateRefreshTokenJob extends Job
         if ($repository->isRefreshTokenRevoked($refreshTokenData['refresh_token_id']) === true) {
             throw OAuthServerException::invalidRefreshToken('Token has been revoked');
         }
-        
+
         return $refreshTokenData;
     }
 }

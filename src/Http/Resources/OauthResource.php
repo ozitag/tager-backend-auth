@@ -18,6 +18,7 @@ class OauthResource extends JsonResource
             'tokenType' => 'Bearer',
             'expiresAt' => Carbon::parse($this->resource['expireDateTime'])->toIso8601ZuluString(),
             'accessToken' => $this->resource['token'],
+            'scopes' => $this->resource['scopes'] ?? [],
             'refreshToken' => $this->resource['refreshToken'],
         ];
     }

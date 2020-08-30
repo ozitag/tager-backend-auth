@@ -21,7 +21,8 @@ class AuthFeature extends Feature
         return new OauthResource([
             'token' => (string)$accessToken,
             'expireDateTime' => $accessToken->getExpiryDateTime(),
-            'refreshToken' => $refreshToken
+            'refreshToken' => $refreshToken,
+            'scopes' => $accessToken->getScopes()
         ]);
     }
 }

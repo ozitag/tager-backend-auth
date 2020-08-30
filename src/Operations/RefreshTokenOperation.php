@@ -5,7 +5,9 @@ namespace OZiTAG\Tager\Backend\Auth\Operations;
 use OZiTAG\Tager\Backend\Auth\Jobs\GetClientOrFailJob;
 use OZiTAG\Tager\Backend\Auth\Jobs\RevokeTokensJob;
 use OZiTAG\Tager\Backend\Auth\Jobs\ValidateRefreshTokenJob;
+use OZiTAG\Tager\Backend\Auth\Repositories\AuthUserRepository;
 use OZiTAG\Tager\Backend\Core\Jobs\Operation;
+use OZiTAG\Tager\Backend\Rbac\Facades\Role;
 
 class RefreshTokenOperation extends Operation
 {
@@ -26,7 +28,11 @@ class RefreshTokenOperation extends Operation
         $this->refreshToken = $refreshToken;
     }
 
-    public function handle() : array
+    /**
+     * @param AuthUserRepository $userRepository
+     * @return array
+     */
+    public function handle(AuthUserRepository $userRepository) : array
     {
         $clientId = $this->run(GetClientOrFailJob::class, [
             'clientId' => $this->clientId,
@@ -44,7 +50,10 @@ class RefreshTokenOperation extends Operation
 
         return $this->run(GenerateTokensOperation::class, [
             'clientId' => $refreshTokenData['client_id'],
-            'userId' => $refreshTokenData['user_id']
+            'userId' => $refreshTokenData['user_id'],
+            'scopes' => Role::getUserScopesByRole(
+                $userRepository->find($refreshTokenData['user_id'])
+            )
         ]);
     }
 }

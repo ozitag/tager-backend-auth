@@ -5,6 +5,7 @@ namespace OZiTAG\Tager\Backend\Auth\Operations;
 use OZiTAG\Tager\Backend\Auth\Jobs\GetAuthUserOrFailJob;
 use OZiTAG\Tager\Backend\Auth\Jobs\GetClientOrFailJob;
 use OZiTAG\Tager\Backend\Core\Jobs\Operation;
+use OZiTAG\Tager\Backend\Rbac\Facades\Role;
 
 class AuthUserOperation extends Operation
 {
@@ -43,7 +44,8 @@ class AuthUserOperation extends Operation
 
         return $this->run(GenerateTokensOperation::class, [
             'clientId' => $clientId,
-            'userId' => $user->id
+            'userId' => $user->id,
+            'scopes' => Role::getUserScopesByRole($user)
         ]);
     }
 }

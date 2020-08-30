@@ -23,6 +23,11 @@ class GetClientOrFailJob extends Job
         $this->clientSecret = $clientSecret;
     }
 
+    /**
+     * @param ClientRepository $repository
+     * @return string
+     * @throws ValidationException
+     */
     public function handle(ClientRepository $repository)
     {
         $client = $repository->validateClient($this->clientId, $this->clientSecret, 'password');

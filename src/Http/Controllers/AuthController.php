@@ -11,9 +11,12 @@ class AuthController extends Controller
 {
     public function index(Request $request)
     {
-        $feature = $request->get('grant_type') === 'refresh_token' ?
-            RefreshFeature::class : AuthFeature::class;
-        
+        if ($request->get('grant_type') === 'refresh_token') {
+            $feature = RefreshFeature::class;
+        } else {
+            $feature = AuthFeature::class;
+        }
+
         return $this->serve($feature);
     }
 }
