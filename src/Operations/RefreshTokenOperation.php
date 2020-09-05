@@ -51,7 +51,7 @@ class RefreshTokenOperation extends Operation
         return $this->run(GenerateTokensOperation::class, [
             'clientId' => $refreshTokenData['client_id'],
             'userId' => $refreshTokenData['user_id'],
-            'scopes' => Role::getUserScopesByRole(
+            'scopes' => Role::getUserScopes(
                 $userRepository->find($refreshTokenData['user_id'])
             )
         ]);

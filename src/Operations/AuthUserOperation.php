@@ -45,7 +45,7 @@ class AuthUserOperation extends Operation
         return $this->run(GenerateTokensOperation::class, [
             'clientId' => $clientId,
             'userId' => $user->id,
-            'scopes' => Role::getUserScopesByRole($user)
+            'scopes' => Role::getUserScopes($user)
         ]);
     }
 }
