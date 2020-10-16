@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->get('grant_type') === 'refresh_token') {
+        if ($request->get('grantType') === 'refresh_token') {
             $feature = RefreshFeature::class;
         } else {
             $feature = AuthFeature::class;
