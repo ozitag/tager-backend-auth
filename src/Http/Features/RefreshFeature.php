@@ -4,7 +4,6 @@ namespace OZiTAG\Tager\Backend\Auth\Http\Features;
 
 use OZiTAG\Tager\Backend\Auth\Http\Requests\RefreshRequest;
 use OZiTAG\Tager\Backend\Auth\Http\Resources\OauthResource;
-use OZiTAG\Tager\Backend\Auth\Operations\GenerateTokensOperation;
 use OZiTAG\Tager\Backend\Auth\Operations\RefreshTokenOperation;
 use OZiTAG\Tager\Backend\Core\Features\Feature;
 
@@ -23,7 +22,7 @@ class RefreshFeature extends Feature
             'token' => (string)$accessToken,
             'expireDateTime' => $accessToken->getExpiryDateTime(),
             'refreshToken' => $refreshToken,
-            'scopes' => $accessToken->getScopes()
+            'scopes' => $accessToken->getScopes(),
         ]);
     }
 }

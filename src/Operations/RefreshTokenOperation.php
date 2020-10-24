@@ -8,6 +8,7 @@ use OZiTAG\Tager\Backend\Auth\Jobs\ValidateRefreshTokenJob;
 use OZiTAG\Tager\Backend\Auth\Repositories\AuthUserRepository;
 use OZiTAG\Tager\Backend\Core\Jobs\Operation;
 use OZiTAG\Tager\Backend\Rbac\Facades\Role;
+use OZiTAG\Tager\Backend\Rbac\Facades\UserAccessControl;
 
 class RefreshTokenOperation extends Operation
 {
@@ -51,7 +52,7 @@ class RefreshTokenOperation extends Operation
         return $this->run(GenerateTokensOperation::class, [
             'clientId' => $refreshTokenData['client_id'],
             'userId' => $refreshTokenData['user_id'],
-            'scopes' => Role::getUserScopes(
+            'scopes' => UserAccessControl::getScopes(
                 $userRepository->find($refreshTokenData['user_id'])
             )
         ]);
