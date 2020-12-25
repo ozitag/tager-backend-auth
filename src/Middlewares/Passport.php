@@ -18,7 +18,7 @@ class Passport
     {
         $grantType = $request->get('grantType');
         $request->merge([
-            'grant_type' => $grantType === 'refresh_token' ? $grantType : 'password'
+            'grant_type' => $grantType === 'refresh_token' ? $grantType : 'password',
         ]);
 
         $provider = $provider ?? ProvidersHelper::getProviderFromAlias(
