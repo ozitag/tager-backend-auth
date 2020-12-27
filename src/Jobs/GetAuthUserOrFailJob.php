@@ -10,20 +10,16 @@ use OZiTAG\Tager\Backend\Core\Validation\ValidationException;
 class GetAuthUserOrFailJob extends Job
 {
     protected string $email;
-    protected string $password;
+    protected ?string $password;
     protected int $clientId;
+    protected bool $checkPassword;
 
-    /**
-     * VallidateAuthJob constructor.
-     * @param string $email
-     * @param string $password
-     * @param string $clientId
-     */
-    public function __construct(string $email, string $password, int $clientId)
+    public function __construct(string $email, ?string $password = null, int $clientId, bool $checkPassword = true)
     {
         $this->email = $email;
         $this->password = $password;
         $this->clientId = $clientId;
+        $this->checkPassword = $checkPassword;
     }
 
     public function handle(AuthUserRepository $repository, Hasher $hasher)
@@ -36,7 +32,7 @@ class GetAuthUserOrFailJob extends Job
             throw ValidationException::field('email', 'User Not Found');
         }
 
-        if (!$hasher->check($this->password, $user->getAuthPassword())) {
+        if ($this->checkPassword && !$hasher->check($this->password, $user->getAuthPassword())) {
             throw ValidationException::field('password', 'Invalid Password');
         }
 

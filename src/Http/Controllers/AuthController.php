@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use OZiTAG\Tager\Backend\Auth\Events\TagerAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Events\TagerSuccessAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Http\Features\AuthFeature;
+use OZiTAG\Tager\Backend\Auth\Http\Features\GoogleAuthFeature;
 use OZiTAG\Tager\Backend\Auth\Http\Features\RefreshFeature;
 use OZiTAG\Tager\Backend\Core\Controllers\Controller;
 
@@ -22,5 +23,10 @@ class AuthController extends Controller
         }
 
         return $this->serve($feature);
+    }
+
+    public function google()
+    {
+        return $this->serve(GoogleAuthFeature::class);
     }
 }
