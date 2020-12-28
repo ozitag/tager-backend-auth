@@ -11,7 +11,7 @@ class GoogleRecaptcha
 
     public function isEnabled(string $provider): bool
     {
-        return $this->getServerKey($provider) !== null;
+        return !empty($this->getServerKey($provider));
     }
 
     public function verify(string $provider, ?string $recaptchaClientToken, string $ipAddress): bool

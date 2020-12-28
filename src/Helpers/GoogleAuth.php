@@ -19,7 +19,7 @@ class GoogleAuth
 
     public function isEnabled(string $provider): bool
     {
-        return $this->getClientId($provider) !== null;
+        return !empty($this->getClientId($provider));
     }
 
     public function getEmailByIdToken(string $provider, string $idToken): ?string
