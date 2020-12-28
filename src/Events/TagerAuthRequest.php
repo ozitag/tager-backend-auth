@@ -12,6 +12,7 @@ class TagerAuthRequest
      * @param string|null $user_agent
      * @param string $provider
      * @param string $uuid
+     * @param bool|null $success
      */
     public function __construct(
         public ?string $email,
@@ -20,5 +21,6 @@ class TagerAuthRequest
         public ?string $user_agent,
         public string $provider,
         public string $uuid,
+        public ?bool $success,
     ) {}
 }

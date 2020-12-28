@@ -41,10 +41,7 @@ class AuthFeature extends Feature
             'clientId' => 1,
         ]);
 
-        event(new TagerSuccessAuthRequest(
-            Config::get('auth.guards.api.provider'),
-            $uuid,
-        ));
+        event(new TagerSuccessAuthRequest($provider, $uuid));
 
         return new OauthResource([
             'token' => (string)$accessToken,
