@@ -21,6 +21,6 @@ class TagerAuthRequest
         public ?string $user_agent,
         public string $provider,
         public string $uuid,
-        public ?bool $success,
+        public ?bool $success = false,
     ) {}
 }
