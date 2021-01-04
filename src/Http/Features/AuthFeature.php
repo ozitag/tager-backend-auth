@@ -11,7 +11,7 @@ use OZiTAG\Tager\Backend\Auth\Http\Requests\AuthRequest;
 use OZiTAG\Tager\Backend\Auth\Http\Resources\OauthResource;
 use OZiTAG\Tager\Backend\Auth\Operations\AuthUserOperation;
 use OZiTAG\Tager\Backend\Core\Features\Feature;
-use OZiTAG\Tager\Backend\Core\Validation\ValidationException;
+use OZiTAG\Tager\Backend\Validation\Facades\Validation;
 
 class AuthFeature extends Feature
 {
@@ -20,7 +20,7 @@ class AuthFeature extends Feature
         $provider = Config::get('auth.guards.api.provider');
 
         if ($recaptcha->isEnabled($provider) && $recaptcha->verify($provider, $request->recaptchaToken, $request->ip()) == false) {
-            throw ValidationException::field('recaptchaToken', 'Robot detected');
+            Validation::throw('recaptchaToken', 'Robot detected');
         }
 
         $uuid = Str::orderedUuid();

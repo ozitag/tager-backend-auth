@@ -10,7 +10,7 @@ use OZiTAG\Tager\Backend\Auth\Http\Requests\GoogleAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Http\Resources\OauthResource;
 use OZiTAG\Tager\Backend\Auth\Operations\AuthUserOperationWithoutPassword;
 use OZiTAG\Tager\Backend\Core\Features\Feature;
-use OZiTAG\Tager\Backend\Core\Validation\ValidationException;
+use OZiTAG\Tager\Backend\Validation\Facades\Validation;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GoogleAuthFeature extends Feature
@@ -30,7 +30,7 @@ class GoogleAuthFeature extends Feature
 
         $email = $googleAuth->getEmailByIdToken($provider, $request->idToken);
         if (!$email) {
-            throw ValidationException::field('email', 'Can not extract email from Google Account');
+            Validation::throw('email', 'Can not extract email from Google Account');
         }
 
         event(new TagerAuthRequest(

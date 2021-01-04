@@ -5,7 +5,7 @@ namespace OZiTAG\Tager\Backend\Auth\Jobs;
 use Illuminate\Contracts\Hashing\Hasher;
 use OZiTAG\Tager\Backend\Auth\Repositories\AuthUserRepository;
 use OZiTAG\Tager\Backend\Core\Jobs\Job;
-use OZiTAG\Tager\Backend\Core\Validation\ValidationException;
+use OZiTAG\Tager\Backend\Validation\Facades\Validation;
 
 class GetAuthUserOrFailJob extends Job
 {
@@ -22,6 +22,10 @@ class GetAuthUserOrFailJob extends Job
         $this->checkPassword = $checkPassword;
     }
 
+    /**
+     * @param AuthUserRepository $repository
+     * @param Hasher $hasher
+     */
     public function handle(AuthUserRepository $repository, Hasher $hasher)
     {
         $user = $repository->getUserEntityByUserCredentials(
@@ -29,11 +33,11 @@ class GetAuthUserOrFailJob extends Job
         );
 
         if (!$user) {
-            throw ValidationException::field('email', 'User Not Found');
+            Validation::throw('email', 'User Not Found');
         }
 
         if ($this->checkPassword && !$hasher->check($this->password, $user->getAuthPassword())) {
-            throw ValidationException::field('password', 'Invalid Password');
+            Validation::throw('password', 'Invalid Password');
         }
 
         return $user;
