@@ -8,17 +8,11 @@ use OZiTAG\Tager\Backend\Validation\Facades\Validation;
 
 class GetClientOrFailJob extends Job
 {
-    protected int $clientId;
-    protected ?string $clientSecret;
-
-    /**
-     * @param int $clientId
-     */
-    public function __construct(int $clientId, ?string $clientSecret = null)
-    {
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-    }
+    public function __construct(
+        protected int $client_id,
+        protected ?string $client_secret = null,
+        protected string $grant_type = 'password',
+    ) {}
 
     /**
      * @param ClientRepository $repository
@@ -26,13 +20,13 @@ class GetClientOrFailJob extends Job
      */
     public function handle(ClientRepository $repository)
     {
-        $client = $repository->validateClient($this->clientId, $this->clientSecret, 'password');
+        $client = $repository->validateClient($this->client_id, $this->client_secret, $this->grant_type);
 
-        if(!$client) {
+        if (!$client) {
             Validation::throw('clientId', 'Invalid Client Id or Secret');
         }
 
-        $client = $repository->getClientEntity($this->clientId);
+        $client = $repository->getClientEntity($this->client_id);
 
         return $client->getIdentifier();
     }

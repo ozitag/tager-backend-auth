@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use OZiTAG\Tager\Backend\Auth\Events\TagerAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Events\TagerSuccessAuthRequest;
+use OZiTAG\Tager\Backend\Auth\Facades\TagerAuth;
 use OZiTAG\Tager\Backend\Auth\Helpers\GoogleRecaptcha;
 use OZiTAG\Tager\Backend\Auth\Http\Requests\AuthRequest;
 use OZiTAG\Tager\Backend\Auth\Http\Resources\OauthResource;
-use OZiTAG\Tager\Backend\Auth\Operations\AuthUserOperation;
 use OZiTAG\Tager\Backend\Core\Features\Feature;
 use OZiTAG\Tager\Backend\Validation\Facades\Validation;
 
@@ -34,12 +34,12 @@ class AuthFeature extends Feature
             $uuid
         ));
 
-        list($accessToken, $refreshToken) = $this->run(AuthUserOperation::class, [
-            'password' => $request->password,
-            'email' => $request->email,
-            'clientSecret' => null,
-            'clientId' => 1,
-        ]);
+        list($accessToken, $refreshToken) = TagerAuth::auth(
+            $request->get('password'),
+            $request->get('email'),
+            $request->get('clientId', 1),
+            $request->get('clientSecret'),
+        );
 
         event(new TagerSuccessAuthRequest($provider, $uuid));
 

@@ -9,18 +9,12 @@ use OZiTAG\Tager\Backend\Validation\Facades\Validation;
 
 class GetAuthUserOrFailJob extends Job
 {
-    protected string $email;
-    protected ?string $password;
-    protected int $clientId;
-    protected bool $checkPassword;
 
-    public function __construct(string $email, ?string $password = null, int $clientId, bool $checkPassword = true)
-    {
-        $this->email = $email;
-        $this->password = $password;
-        $this->clientId = $clientId;
-        $this->checkPassword = $checkPassword;
-    }
+    public function __construct(
+        protected string $username,
+        protected ?string $password = null,
+        protected bool $check_password = true
+    ) {}
 
     /**
      * @param AuthUserRepository $repository
@@ -29,14 +23,14 @@ class GetAuthUserOrFailJob extends Job
     public function handle(AuthUserRepository $repository, Hasher $hasher)
     {
         $user = $repository->getUserEntityByUserCredentials(
-            $this->email
+            $this->username
         );
 
         if (!$user) {
             Validation::throw('email', 'User Not Found');
         }
 
-        if ($this->checkPassword && !$hasher->check($this->password, $user->getAuthPassword())) {
+        if ($this->check_password && !$hasher->check($this->password, $user->getAuthPassword())) {
             Validation::throw('password', 'Invalid Password');
         }
 

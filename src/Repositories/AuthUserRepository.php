@@ -24,9 +24,6 @@ class AuthUserRepository extends EloquentRepository
         parent::__construct(new $model);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getUserEntityByUserCredentials($username)
     {
 

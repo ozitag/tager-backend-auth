@@ -9,20 +9,11 @@ use OZiTAG\Tager\Backend\Core\Jobs\Job;
 class RevokeTokensJob extends Job
 {
 
-    protected array $refreshTokenData;
-
-    /**
-     * GetRefreshTokenJob constructor.
-     * @param $refreshTokenData
-     */
-    public function __construct(array $refreshTokenData)
-    {
-        $this->refreshTokenData = $refreshTokenData;
-    }
+    public function __construct(protected array $refresh_token_data) {}
 
     public function handle(RefreshTokenRepository $refreshTokenRepository, AccessTokenRepository $accessTokenRepository)
     {
-        $accessTokenRepository->revokeAccessToken($this->refreshTokenData['access_token_id']);
-        $refreshTokenRepository->revokeRefreshToken($this->refreshTokenData['refresh_token_id']);
+        $accessTokenRepository->revokeAccessToken($this->refresh_token_data['access_token_id']);
+        $refreshTokenRepository->revokeRefreshToken($this->refresh_token_data['refresh_token_id']);
     }
 }

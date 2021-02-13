@@ -3,6 +3,8 @@
 namespace OZiTAG\Tager\Backend\Auth\Helpers;
 
 
+use Illuminate\Support\Facades\Config;
+
 class ProvidersHelper
 {
 
@@ -19,7 +21,7 @@ class ProvidersHelper
     {
         $providers = config('auth.providers') ?? [];
         $provider = array_filter($providers, fn ($i) => ($i['alias'] ?? '') === $alias);
-        if($provider) {
+        if ($provider) {
             return array_key_first($provider);
         }
         return self::getDefaultProviderFromAlias($alias);
@@ -30,10 +32,13 @@ class ProvidersHelper
      * @return mixed
      */
     protected static function getDefaultProviderAlias($provider) {
-        return [
-            'administrators' => 'admin',
-            'users' => 'user',
-        ][$provider];
+        $alias = Config::get('tager-auth.providers_aliases')[$provider] ?? null;
+
+        if (!$alias) {
+            throw new \RuntimeException('Tager Auth Config - provider alias not found');
+        }
+
+        return $alias;
     }
 
     /**
@@ -41,9 +46,12 @@ class ProvidersHelper
      * @return mixed
      */
     protected static function getDefaultProviderFromAlias($alias) {
-        return [
-            'admin' => 'administrators',
-            'user' => 'users',
-        ][$alias];
+        $provider = array_flip(Config::get('tager-auth.providers_aliases'))[$alias] ?? null;
+
+        if (!$provider) {
+            throw new \RuntimeException('Tager Auth Config - provider not found');
+        }
+
+        return $provider;
     }
 }

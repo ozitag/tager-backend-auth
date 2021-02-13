@@ -12,22 +12,12 @@ use OZiTAG\Tager\Backend\Rbac\Facades\UserAccessControl;
 
 class RefreshTokenOperation extends Operation
 {
-    protected int $clientId;
-    protected ?string $clientSecret;
-    protected string $refreshToken;
 
-    /**
-     * RefreshTokenOperation constructor.
-     * @param int $clientId
-     * @param string|null $clientSecret
-     * @param string $refreshToken
-     */
-    public function __construct(int $clientId, ?string $clientSecret = null, string $refreshToken)
-    {
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->refreshToken = $refreshToken;
-    }
+    public function __construct(
+        protected string $refresh_token,
+        protected int $client_id,
+        protected ?string $client_secret = null
+    ) {}
 
     /**
      * @param AuthUserRepository $userRepository
@@ -35,25 +25,25 @@ class RefreshTokenOperation extends Operation
      */
     public function handle(AuthUserRepository $userRepository) : array
     {
-        $clientId = $this->run(GetClientOrFailJob::class, [
-            'clientId' => $this->clientId,
-            'clientSecret' => $this->clientSecret,
+        $client_id = $this->run(GetClientOrFailJob::class, [
+            'client_id' => $this->client_id,
+            'client_secret' => $this->client_secret,
         ]);
 
-        $refreshTokenData = $this->run(ValidateRefreshTokenJob::class, [
-            'refreshToken' => $this->refreshToken,
-            'clientId' => $clientId,
+        $refresh_token_data = $this->run(ValidateRefreshTokenJob::class, [
+            'refresh_token' => $this->refresh_token,
+            'client_id' => $client_id,
         ]);
 
         $this->run(RevokeTokensJob::class, [
-            'refreshTokenData' => $refreshTokenData
+            'refresh_token_data' => $refresh_token_data
         ]);
 
         return $this->run(GenerateTokensOperation::class, [
-            'clientId' => $refreshTokenData['client_id'],
-            'userId' => $refreshTokenData['user_id'],
+            'client_id' => $refresh_token_data['client_id'],
+            'user_id' => $refresh_token_data['user_id'],
             'scopes' => UserAccessControl::getScopes(
-                $userRepository->find($refreshTokenData['user_id'])
+                $userRepository->find($refresh_token_data['user_id'])
             )
         ]);
     }

@@ -27,11 +27,11 @@ class Grant extends AbstractGrant
         $this->refreshTokenTTL = Passport::refreshTokensExpireIn();
     }
 
-    public function getNewAccessToken($userId, $clientId, $scopes = []) {
+    public function getNewAccessToken($user_id, $client_id, $scopes = []) {
         return $this->issueAccessToken(
             Passport::personalAccessTokensExpireIn(),
-            $this->clientRepository->getClientEntity($clientId),
-            $userId,
+            $this->clientRepository->getClientEntity($client_id),
+            $user_id,
             $scopes
         );
     }

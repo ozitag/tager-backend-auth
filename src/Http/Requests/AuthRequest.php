@@ -20,6 +20,8 @@ class AuthRequest extends FormRequest
             'email' => 'email|required',
             'password' => 'string|required',
             'recaptchaToken' => 'nullable|string',
+            'clientId' => 'nullable|integer',
+            'clientSecret' => 'nullable|string',
         ];
     }
 }

@@ -8,28 +8,17 @@ use OZiTAG\Tager\Backend\Core\Jobs\Operation;
 
 class GenerateTokensOperation extends Operation
 {
-    protected int $clientId;
-    protected int $userId;
-    protected array $scopes;
-
-    /**
-     * GenerateTokensOperation constructor.
-     * @param int $clientId
-     * @param int $userId
-     * @param array $scopes
-     */
-    public function __construct(int $clientId, int $userId, array $scopes = [])
-    {
-        $this->clientId = $clientId;
-        $this->userId = $userId;
-        $this->scopes = $scopes;
-    }
+    public function __construct(
+        protected int $client_id,
+        protected int $user_id,
+        protected array $scopes = []
+    ) {}
 
     public function handle(): array
     {
         $accessToken = $this->run(GetAccessTokenJob::class, [
-            'userId' => $this->userId,
-            'clientId' => $this->clientId,
+            'user_id' => $this->user_id,
+            'client_id' => $this->client_id,
             'scopes' => $this->scopes,
         ]);
 
