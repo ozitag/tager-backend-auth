@@ -29,7 +29,7 @@ class GetAuthUserOrFailJob extends Job
         );
 
         if (!$user) {
-            throw ValidationException::field('email', 'User Not Found');
+            throw ValidationException::field('password', 'Invalid Password');
         }
 
         if ($this->checkPassword && !$hasher->check($this->password, $user->getAuthPassword())) {
