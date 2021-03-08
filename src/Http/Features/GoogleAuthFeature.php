@@ -5,12 +5,13 @@ namespace OZiTAG\Tager\Backend\Auth\Http\Features;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use OZiTAG\Tager\Backend\Auth\Events\TagerAuthRequest;
+use OZiTAG\Tager\Backend\Auth\Facades\TagerAuth;
 use OZiTAG\Tager\Backend\Auth\Helpers\GoogleAuth;
 use OZiTAG\Tager\Backend\Auth\Http\Requests\GoogleAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Http\Resources\OauthResource;
 use OZiTAG\Tager\Backend\Auth\Operations\AuthUserOperationWithoutPassword;
 use OZiTAG\Tager\Backend\Core\Features\Feature;
-use OZiTAG\Tager\Backend\Core\Validation\ValidationException;
+use OZiTAG\Tager\Backend\Validation\Facades\Validation;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GoogleAuthFeature extends Feature
@@ -29,8 +30,9 @@ class GoogleAuthFeature extends Feature
         }
 
         $email = $googleAuth->getEmailByIdToken($provider, $request->idToken);
+
         if (!$email) {
-            throw ValidationException::field('email', 'Can not extract email from Google Account');
+            Validation::throw('email', 'Can not extract email from Google Account');
         }
 
         event(new TagerAuthRequest(
@@ -43,14 +45,13 @@ class GoogleAuthFeature extends Feature
             true
         ));
 
-        list($accessToken, $refreshToken) = $this->run(AuthUserOperationWithoutPassword::class, [
-            'email' => $email,
-            'clientSecret' => null,
-            'clientId' => 1,
-        ]);
+        list($accessToken, $refreshToken) = TagerAuth::authWithoutPassword(
+            $email, $request->get('clientId', 1),
+            $request->get('clientSecret'),
+        );
 
         return new OauthResource([
-            'token' => (string)$accessToken,
+            'token' => (string) $accessToken,
             'expireDateTime' => $accessToken->getExpiryDateTime(),
             'refreshToken' => $refreshToken,
             'scopes' => $accessToken->getScopes(),

@@ -18,8 +18,10 @@ class AuthRequest extends FormRequest
     {
         return [
             'email' => 'email|required',
-            'password' => 'string|required|min:4',
+            'password' => 'string|required',
             'recaptchaToken' => 'nullable|string',
+            'clientId' => 'nullable|integer',
+            'clientSecret' => 'nullable|string',
         ];
     }
 }

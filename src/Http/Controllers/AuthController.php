@@ -5,6 +5,7 @@ namespace OZiTAG\Tager\Backend\Auth\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
+use OZiTAG\Tager\Backend\Auth\Http\Features\AuthClientFeature;
 use OZiTAG\Tager\Backend\Auth\Http\Features\AuthFeature;
 use OZiTAG\Tager\Backend\Auth\Http\Features\GoogleAuthFeature;
 use OZiTAG\Tager\Backend\Auth\Http\Features\RefreshFeature;
@@ -26,5 +27,10 @@ class AuthController extends Controller
     public function google()
     {
         return $this->serve(GoogleAuthFeature::class);
+    }
+
+    public function client()
+    {
+        return $this->serve(AuthClientFeature::class);
     }
 }

@@ -16,6 +16,8 @@ class RefreshRequest extends FormRequest
     {
         return [
             'refreshToken' => 'string|required',
+            'clientId' => 'nullable|integer',
+            'clientSecret' => 'nullable|string',
         ];
     }
 }

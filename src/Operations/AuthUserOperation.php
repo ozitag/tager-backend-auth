@@ -10,42 +10,30 @@ use OZiTAG\Tager\Backend\Rbac\Facades\UserAccessControl;
 
 class AuthUserOperation extends Operation
 {
-    protected int $clientId;
-    protected ?string $clientSecret;
-    protected string $password;
-    protected string $email;
-
-    /**
-     * AuthUserOperation constructor.
-     * @param int $clientId
-     * @param string|null $clientSecret
-     * @param string $email
-     * @param string $password
-     */
-    public function __construct(int $clientId, ?string $clientSecret = null, string $email, string $password)
-    {
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->email = $email;
-        $this->password = $password;
-    }
+    public function __construct(
+        protected int $client_id,
+        protected string $username,
+        protected ?string $password = null,
+        protected ?string $client_secret = null,
+        protected bool $check_password = true,
+    ) {}
 
     public function handle() : array
     {
-        $clientId = $this->run(GetClientOrFailJob::class, [
-            'clientId' => $this->clientId,
-            'clientSecret' => $this->clientSecret,
+        $client_id = $this->run(GetClientOrFailJob::class, [
+            'client_id' => $this->client_id,
+            'client_secret' => $this->client_secret,
         ]);
 
         $user = $this->run(GetAuthUserOrFailJob::class, [
-            'email' => $this->email,
+            'username' => $this->username,
             'password' => $this->password,
-            'clientId' => $clientId,
+            'check_password' => $this->check_password,
         ]);
 
         return $this->run(GenerateTokensOperation::class, [
-            'clientId' => $clientId,
-            'userId' => $user->id,
+            'client_id' => $client_id,
+            'user_id' => $user->id,
             'scopes' => UserAccessControl::getScopes($user),
         ]);
     }

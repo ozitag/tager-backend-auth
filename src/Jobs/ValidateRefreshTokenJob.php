@@ -13,18 +13,10 @@ class ValidateRefreshTokenJob extends Job
 {
     use CryptTrait;
 
-    protected string $refreshToken;
-    protected int $clientId;
-
-    /**
-     * GetRefreshTokenJob constructor.
-     * @param $refreshToken
-     * @param $clientId
-     */
-    public function __construct(string $refreshToken, int $clientId)
-    {
-        $this->refreshToken = $refreshToken;
-        $this->clientId = $clientId;
+    public function __construct(
+        protected string $refresh_token,
+        protected int $client_id
+    ) {
         $this->setEncryptionKey(app('encrypter')->getKey());
     }
 
@@ -36,11 +28,11 @@ class ValidateRefreshTokenJob extends Job
     public function handle(RefreshTokenRepository $repository) : array
     {
         $refreshToken = $this->withExceptionHandler(
-            fn () => $this->decrypt($this->refreshToken)
+            fn () => $this->decrypt($this->refresh_token)
         );
         $refreshTokenData = json_decode($refreshToken, true);
 
-        if ($refreshTokenData['client_id'] !== $this->clientId) {
+        if ($refreshTokenData['client_id'] !== $this->client_id) {
             throw OAuthServerException::invalidRefreshToken('Token is not linked to client');
         }
 
