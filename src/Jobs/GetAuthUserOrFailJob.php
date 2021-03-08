@@ -27,7 +27,7 @@ class GetAuthUserOrFailJob extends Job
         );
 
         if (!$user) {
-            throw ValidationException::field('password', 'Invalid Password');
+            Validation::throw('password', 'Invalid Password');
         }
 
         if ($this->check_password && !$hasher->check($this->password, $user->getAuthPassword())) {
