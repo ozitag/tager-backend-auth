@@ -27,11 +27,11 @@ class GetAuthUserOrFailJob extends Job
         );
 
         if (!$user) {
-            Validation::throw('password', 'Invalid Password');
+            Validation::throw('password', __('tager-auth::messages.invalid_password'));
         }
 
         if ($this->check_password && !$hasher->check($this->password, $user->getAuthPassword())) {
-            Validation::throw('password', 'Invalid Password');
+            Validation::throw('password', __('tager-auth::messages.invalid_password'));
         }
 
         return $user;

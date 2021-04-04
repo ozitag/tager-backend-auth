@@ -46,6 +46,7 @@ class AuthServiceProvider extends EventServiceProvider
         app('router')->aliasMiddleware('passport', Passport::class);
         app('router')->aliasMiddleware('client', CheckClientCredentials::class);
 
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'tager-auth');
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
     }
 
