@@ -27,7 +27,7 @@ class AuthFeature extends Feature
 
         event(new TagerAuthRequest(
             $request->get('email'),
-            $request->get('grant_type'),
+            $request->get('grant_type', 'password'),
             $request->ip(),
             $request->userAgent(),
             $provider,
