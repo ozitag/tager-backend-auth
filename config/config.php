@@ -11,4 +11,6 @@ return [
     ],
     'client_auth_enabled' => false,
     'hash_clients_secrets' => true,
+    'dev_auth' => true,
+    'dev_auth_header' => 'Tager-Dev-Authorization',
 ];

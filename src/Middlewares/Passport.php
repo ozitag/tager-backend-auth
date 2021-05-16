@@ -3,8 +3,10 @@
 namespace OZiTAG\Tager\Backend\Auth\Middlewares;
 
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use OZiTAG\Tager\Backend\Auth\Helpers\ProvidersHelper;
+use OZiTAG\Tager\Backend\Auth\Jobs\AuthUserByDevRequestJob;
 
 class Passport
 {
@@ -26,6 +28,12 @@ class Passport
         );
 
         Config::set('auth.guards.api.provider', $provider);
+
+        if (Config::get('tager-auth.dev_auth')) {
+            dispatch_now(new AuthUserByDevRequestJob(
+                $request->header(Config::get('tager-auth.dev_auth_header'))
+            ));
+        }
 
         return $next($request);
     }
