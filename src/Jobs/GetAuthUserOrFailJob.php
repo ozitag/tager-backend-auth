@@ -9,12 +9,13 @@ use OZiTAG\Tager\Backend\Validation\Facades\Validation;
 
 class GetAuthUserOrFailJob extends Job
 {
-
     public function __construct(
         protected string $username,
         protected ?string $password = null,
         protected bool $check_password = true
-    ) {}
+    )
+    {
+    }
 
     /**
      * @param AuthUserRepository $repository
@@ -27,7 +28,11 @@ class GetAuthUserOrFailJob extends Job
         );
 
         if (!$user) {
-            Validation::throw('password', __('tager-auth::messages.invalid_password'));
+            if ($this->check_password) {
+                Validation::throw('password', __('tager-auth::messages.invalid_password'));
+            } else {
+                Validation::throw(null, __('tager-auth::messages.user_not_found'));
+            }
         }
 
         if ($this->check_password && !$hasher->check($this->password, $user->getAuthPassword())) {

@@ -32,7 +32,7 @@ class GoogleAuthFeature extends Feature
         $email = $googleAuth->getEmailByIdToken($provider, $request->idToken);
 
         if (!$email) {
-            Validation::throw('email', 'Can not extract email from Google Account');
+            Validation::throw(null, 'Can not extract email from Google Account');
         }
 
         event(new TagerAuthRequest(
@@ -51,7 +51,7 @@ class GoogleAuthFeature extends Feature
         );
 
         return new OauthResource([
-            'token' => (string) $accessToken,
+            'token' => (string)$accessToken,
             'expireDateTime' => $accessToken->getExpiryDateTime(),
             'refreshToken' => $refreshToken,
             'scopes' => $accessToken->getScopes(),
