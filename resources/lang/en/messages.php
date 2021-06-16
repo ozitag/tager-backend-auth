@@ -2,5 +2,5 @@
 
 return [
     'invalid_password' => 'Invalid password',
-    'user_not_founder' => 'User not found',
+    'blocked_account' => 'Account is blocked'
 ];
