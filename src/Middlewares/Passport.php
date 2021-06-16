@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use OZiTAG\Tager\Backend\Auth\Contracts\UserMaybeBlockedContract;
 use OZiTAG\Tager\Backend\Auth\Helpers\ProvidersHelper;
 use OZiTAG\Tager\Backend\Auth\Jobs\AuthUserByDevRequestJob;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -39,7 +40,7 @@ class Passport
 
         $user = Auth::user();
 
-        if ($user && method_exists($user, 'isBlocked') && $user->isBlocked()) {
+        if ($user && $user instanceof UserMaybeBlockedContract && $user->isBlocked()) {
             throw new AccessDeniedHttpException(__('tager-auth::messages.blocked_account'));
         }
 
