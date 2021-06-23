@@ -39,4 +39,8 @@ class AuthUserRepository extends EloquentRepository
 
         return $user;
     }
+    
+    public function findByEmail(string $email) {
+        return $this->model->whereEmail($email)->first();
+    }
 }

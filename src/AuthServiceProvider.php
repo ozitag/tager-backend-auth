@@ -4,7 +4,11 @@ namespace OZiTAG\Tager\Backend\Auth;
 
 use Illuminate\Support\Facades\Config;
 use Laravel\Passport\Http\Middleware\CheckClientCredentials;
+use OZiTAG\Tager\Backend\Auth\Events\TagerAuthRequest;
+use OZiTAG\Tager\Backend\Auth\Events\TagerSuccessAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Helpers\ProvidersHelper;
+use OZiTAG\Tager\Backend\Auth\Listeners\AuthAttemptListener;
+use OZiTAG\Tager\Backend\Auth\Listeners\SuccessAuthListener;
 use OZiTAG\Tager\Backend\Auth\Scopes\TokenProviderScope;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +20,14 @@ use OZiTAG\Tager\Backend\Rbac\RbacServiceProvider;
 
 class AuthServiceProvider extends EventServiceProvider
 {
+    protected $listen = [
+        TagerAuthRequest::class => [
+            AuthAttemptListener::class
+        ],
+        TagerSuccessAuthRequest::class => [
+            SuccessAuthListener::class
+        ],
+    ];
 
     public function register()
     {
