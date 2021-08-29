@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use OZiTAG\Tager\Backend\Auth\Http\Controllers\AuthController;
 
-Route::group(['prefix' => 'auth', 'middleware' => ['throttle:5,1']], function () {
+Route::group(['prefix' => 'tager/auth', 'middleware' => ['throttle:5,1']], function () {
     Route::post('client', [ AuthController::class, 'client']);
 
     Route::group(['middleware' => ['passport']], function () {
