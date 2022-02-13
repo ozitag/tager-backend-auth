@@ -5,7 +5,7 @@ namespace OZiTAG\Tager\Backend\Auth\Jobs;
 use Illuminate\Contracts\Hashing\Hasher;
 use OZiTAG\Tager\Backend\Auth\Repositories\AuthUserRepository;
 use OZiTAG\Tager\Backend\Core\Jobs\Job;
-use OZiTAG\Tager\Backend\Validation\Facades\Validation;
+use OZiTAG\Tager\Backend\Core\Validation\Facades\Validation;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class GetAuthUserOrFailJob extends Job

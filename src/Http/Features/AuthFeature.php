@@ -11,7 +11,7 @@ use OZiTAG\Tager\Backend\Auth\Helpers\GoogleRecaptcha;
 use OZiTAG\Tager\Backend\Auth\Http\Requests\AuthRequest;
 use OZiTAG\Tager\Backend\Auth\Http\Resources\OauthResource;
 use OZiTAG\Tager\Backend\Core\Features\Feature;
-use OZiTAG\Tager\Backend\Validation\Facades\Validation;
+use OZiTAG\Tager\Backend\Core\Validation\Facades\Validation;
 
 class AuthFeature extends Feature
 {

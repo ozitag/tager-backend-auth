@@ -4,7 +4,7 @@ namespace OZiTAG\Tager\Backend\Auth\Jobs;
 
 use Laravel\Passport\Bridge\ClientRepository;
 use OZiTAG\Tager\Backend\Core\Jobs\Job;
-use OZiTAG\Tager\Backend\Validation\Facades\Validation;
+use OZiTAG\Tager\Backend\Core\Validation\Facades\Validation;
 
 class GetClientOrFailJob extends Job
 {

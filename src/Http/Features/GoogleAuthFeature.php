@@ -11,7 +11,7 @@ use OZiTAG\Tager\Backend\Auth\Http\Requests\GoogleAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Http\Resources\OauthResource;
 use OZiTAG\Tager\Backend\Auth\Operations\AuthUserOperationWithoutPassword;
 use OZiTAG\Tager\Backend\Core\Features\Feature;
-use OZiTAG\Tager\Backend\Validation\Facades\Validation;
+use OZiTAG\Tager\Backend\Core\Validation\Facades\Validation;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GoogleAuthFeature extends Feature
