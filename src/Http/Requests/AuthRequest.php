@@ -17,8 +17,8 @@ class AuthRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'email|required',
-            'password' => 'string|required',
+            'email' => 'required|email',
+            'password' => 'required|string',
             'recaptchaToken' => 'nullable|string',
             'clientId' => 'nullable|integer',
             'clientSecret' => 'nullable|string',
