@@ -35,6 +35,8 @@ class GoogleAuthFeature extends Feature
             Validation::throw(null, 'Can not extract email from Google Account');
         }
 
+        $ipAddresses = $request->ips();
+
         event(new TagerAuthRequest(
             $email,
             'google',

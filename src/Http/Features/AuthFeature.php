@@ -25,10 +25,12 @@ class AuthFeature extends Feature
 
         $uuid = Str::orderedUuid();
 
+        $ipAddresses = $request->ips();
+
         event(new TagerAuthRequest(
             $request->get('email'),
             $request->get('grant_type', 'password'),
-            $request->ip(),
+            !empty($ipAddresses) ? $ipAddresses[count($ipAddresses) - 1] : null,
             $request->userAgent(),
             $provider,
             $uuid
