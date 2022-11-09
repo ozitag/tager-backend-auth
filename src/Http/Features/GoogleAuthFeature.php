@@ -12,6 +12,7 @@ use OZiTAG\Tager\Backend\Auth\Http\Resources\OauthResource;
 use OZiTAG\Tager\Backend\Auth\Operations\AuthUserOperationWithoutPassword;
 use OZiTAG\Tager\Backend\Core\Features\Feature;
 use OZiTAG\Tager\Backend\Core\Validation\Facades\Validation;
+use OZiTAG\Tager\Backend\Utils\Helpers\RequestHelper;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GoogleAuthFeature extends Feature
@@ -21,7 +22,7 @@ class GoogleAuthFeature extends Feature
      * @param GoogleAuth $googleAuth
      * @return OauthResource
      */
-    public function handle(GoogleAuthRequest $request, GoogleAuth $googleAuth)
+    public function handle(GoogleAuthRequest $request, GoogleAuth $googleAuth, RequestHelper $requestHelper)
     {
         $provider = Config::get('auth.guards.api.provider');
 
@@ -35,12 +36,10 @@ class GoogleAuthFeature extends Feature
             Validation::throw(null, 'Can not extract email from Google Account');
         }
 
-        $ipAddresses = $request->ips();
-
         event(new TagerAuthRequest(
             $email,
             'google',
-            $request->ip(),
+            $requestHelper->getIpAddress(),
             $request->userAgent(),
             $provider,
             Str::orderedUuid(),

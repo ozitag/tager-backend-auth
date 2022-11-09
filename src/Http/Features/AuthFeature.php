@@ -12,10 +12,11 @@ use OZiTAG\Tager\Backend\Auth\Http\Requests\AuthRequest;
 use OZiTAG\Tager\Backend\Auth\Http\Resources\OauthResource;
 use OZiTAG\Tager\Backend\Core\Features\Feature;
 use OZiTAG\Tager\Backend\Core\Validation\Facades\Validation;
+use OZiTAG\Tager\Backend\Utils\Helpers\RequestHelper;
 
 class AuthFeature extends Feature
 {
-    public function handle(AuthRequest $request, GoogleRecaptcha $recaptcha)
+    public function handle(AuthRequest $request, GoogleRecaptcha $recaptcha, RequestHelper $requestHelper)
     {
         $provider = Config::get('auth.guards.api.provider');
 
@@ -25,12 +26,10 @@ class AuthFeature extends Feature
 
         $uuid = Str::orderedUuid();
 
-        $ipAddresses = $request->ips();
-
         event(new TagerAuthRequest(
             $request->get('email'),
             $request->get('grant_type', 'password'),
-            !empty($ipAddresses) ? $ipAddresses[count($ipAddresses) - 1] : null,
+            $requestHelper->getIpAddress(),
             $request->userAgent(),
             $provider,
             $uuid
