@@ -33,7 +33,7 @@ class Passport
         Config::set('auth.guards.api.provider', $provider);
 
         if (Config::get('tager-auth.dev_auth')) {
-            dispatch_now(new AuthUserByDevRequestJob(
+            dispatch_sync(new AuthUserByDevRequestJob(
                 $request->header(Config::get('tager-auth.dev_auth_header'))
             ));
         }
