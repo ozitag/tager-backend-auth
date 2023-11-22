@@ -9,6 +9,7 @@ use OZiTAG\Tager\Backend\Auth\Http\Features\AuthClientFeature;
 use OZiTAG\Tager\Backend\Auth\Http\Features\AuthFeature;
 use OZiTAG\Tager\Backend\Auth\Http\Features\GoogleAuthFeature;
 use OZiTAG\Tager\Backend\Auth\Http\Features\RefreshFeature;
+use OZiTAG\Tager\Backend\Auth\Http\Features\YandexAuthFeature;
 use OZiTAG\Tager\Backend\Core\Controllers\Controller;
 
 class AuthController extends Controller
@@ -27,6 +28,11 @@ class AuthController extends Controller
     public function google()
     {
         return $this->serve(GoogleAuthFeature::class);
+    }
+
+    public function yandex()
+    {
+        return $this->serve(YandexAuthFeature::class);
     }
 
     public function client()

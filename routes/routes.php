@@ -8,6 +8,7 @@ Route::group(['prefix' => 'tager/auth', 'middleware' => ['throttle:5,1']], funct
 
     Route::group(['middleware' => ['passport']], function () {
         Route::post('{provider}/google', [ AuthController::class, 'google']);
+        Route::post('{provider}/yandex', [ AuthController::class, 'yandex']);
         Route::post('{provider}', [ AuthController::class, 'index']);
     });
 });
