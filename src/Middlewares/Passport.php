@@ -19,7 +19,7 @@ class Passport
      * @param string|null $provider
      * @return mixed
      */
-    public function handle($request, Closure $next, string $provider = null)
+    public function handle($request, Closure $next, ?string $provider = null)
     {
         $grantType = $request->get('grantType');
         $request->merge([
