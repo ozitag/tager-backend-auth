@@ -23,7 +23,7 @@ class AuthClientFeature extends Feature
         );
 
         return new OauthClientResource([
-            'token' => (string) $accessToken,
+            'token' => $accessToken->toString(),
             'expireDateTime' => $accessToken->getExpiryDateTime(),
             'scopes' => $accessToken->getScopes(),
         ]);

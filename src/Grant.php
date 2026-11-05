@@ -13,8 +13,6 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Grant extends AbstractGrant
 {
-    protected $clientRepository;
-
     public function __construct(
         RefreshTokenRepository $repository,
         ClientRepository $clientRepository,
@@ -45,8 +43,8 @@ class Grant extends AbstractGrant
      *
      * @return string
      */
-    public function getIdentifier() {
-        return;
+    public function getIdentifier(): string {
+        return '';
     }
 
     /**
@@ -62,7 +60,7 @@ class Grant extends AbstractGrant
         ServerRequestInterface $request,
         ResponseTypeInterface $responseType,
         \DateInterval $accessTokenTTL
-    ) {
-        return;
+    ): ResponseTypeInterface {
+        return $responseType;
     }
 }

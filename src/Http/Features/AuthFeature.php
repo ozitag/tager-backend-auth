@@ -45,7 +45,7 @@ class AuthFeature extends Feature
         event(new TagerSuccessAuthRequest($provider, $uuid));
 
         return new OauthResource([
-            'token' => (string)$accessToken,
+            'token' => $accessToken->toString(),
             'expireDateTime' => $accessToken->getExpiryDateTime(),
             'refreshToken' => $refreshToken,
             'scopes' => $accessToken->getScopes(),
