@@ -10,6 +10,8 @@ return [
         'users' => 'user',
     ],
     'client_auth_enabled' => false,
+    // Не используется с Passport 13: секреты клиентов хэшируются всегда.
+    // Оставлено, чтобы не ломать конфиги проектов.
     'hash_clients_secrets' => true,
     'dev_auth' => true,
     'dev_auth_header' => 'Tager-Dev-Authorization',

@@ -35,10 +35,6 @@ class AuthServiceProvider extends EventServiceProvider
 
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'tager-auth');
 
-        if (Config::get('tager-auth.hash_clients_secrets')) {
-            \Laravel\Passport\Passport::hashClientSecrets();
-        }
-
         $this->registerRoutes();
         $this->app->register(RbacServiceProvider::class);
     }
