@@ -21,10 +21,22 @@ class Passport
      */
     public function handle($request, Closure $next, ?string $provider = null)
     {
-        $grantType = $request->get('grantType');
-        $request->merge([
-            'grant_type' => $grantType === 'refresh_token' ? $grantType : 'password',
-        ]);
+        /*
+         * Раньше здесь в каждый запрос подмешивалось
+         * $request->merge(['grant_type' => ...]).
+         *
+         * Middleware висит не только на /tager/auth/*, но и на маршрутах
+         * админки (AdminServiceProvider вешает 'passport:administrators'),
+         * поэтому лишний grant_type оказывался во входных данных любого
+         * запроса админки — и попадал в $request->all() контроллеров,
+         * которые про OAuth ничего не знают.
+         *
+         * Ради этого он там и не нужен: из запроса grant_type читает один
+         * AuthFeature, и читает со своим умолчанием — get('grant_type',
+         * 'password'). Ветка refresh_token уходит в RefreshFeature, который
+         * grant_type не смотрит вовсе. Так что merge был не нужен уже и на
+         * самих маршрутах авторизации.
+         */
 
         $provider = $provider ?? ProvidersHelper::getProviderFromAlias(
                 $request->route('provider')

@@ -3,7 +3,9 @@
 namespace OZiTAG\Tager\Backend\Auth;
 
 use Illuminate\Support\Facades\Config;
+use Laravel\Passport\Bridge\ClientRepository as PassportClientRepository;
 use Laravel\Passport\Http\Middleware\CheckClientCredentials;
+use Laravel\Passport\Passport as LaravelPassport;
 use OZiTAG\Tager\Backend\Auth\Events\TagerAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Events\TagerSuccessAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Helpers\ProvidersHelper;
@@ -16,6 +18,7 @@ use Laravel\Passport\Token;
 use OZiTAG\Tager\Backend\Auth\Observers\TokenObserver;
 use OZiTAG\Tager\Backend\Auth\Middlewares\Provider;
 use OZiTAG\Tager\Backend\Auth\Middlewares\Passport;
+use OZiTAG\Tager\Backend\Auth\Passport\ClientRepository;
 use OZiTAG\Tager\Backend\Rbac\RbacServiceProvider;
 
 class AuthServiceProvider extends EventServiceProvider
@@ -35,8 +38,35 @@ class AuthServiceProvider extends EventServiceProvider
 
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'tager-auth');
 
+        $this->registerPassportCompatibility();
         $this->registerRoutes();
         $this->app->register(RbacServiceProvider::class);
+    }
+
+    /**
+     * Снять с проектов несовместимость Passport 13 со схемой oauth_clients,
+     * на которой пакет работает с первой версии.
+     *
+     * Passport 13 перевёл oauth_clients на uuid-ключ и колонки
+     * redirect_uris/grant_types, но миграции при обновлении не катит.
+     * Значит у любого проекта, который жил на Passport <= 12, таблица
+     * осталась старой, и без этого вход падает с «Invalid Client Id or
+     * Secret» — а чинить это в каждом проекте руками незачем, пакет сам
+     * объявляет "laravel/passport": "^13.0".
+     *
+     * $clientUuids выключен по умолчанию: это та схема, которую заводит
+     * миграция add_default_oauth_client и которая стоит у всех, кто
+     * обновился. Проект на чистой схеме Passport 13 включает uuid обратно
+     * конфигом tager-auth.passport_client_uuids.
+     *
+     * Чтение колонок при этом подстраивается под фактическую схему, так что
+     * ClientRepository работает с обеими.
+     */
+    protected function registerPassportCompatibility(): void
+    {
+        LaravelPassport::$clientUuids = (bool)Config::get('tager-auth.passport_client_uuids', false);
+
+        $this->app->singleton(PassportClientRepository::class, ClientRepository::class);
     }
 
     /**
