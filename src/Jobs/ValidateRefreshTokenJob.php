@@ -15,7 +15,7 @@ class ValidateRefreshTokenJob extends Job
 
     public function __construct(
         protected string $refresh_token,
-        protected int $client_id
+        protected int|string $client_id
     ) {
         $this->setEncryptionKey(app('encrypter')->getKey());
     }

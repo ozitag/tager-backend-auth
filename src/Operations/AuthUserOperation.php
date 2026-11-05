@@ -11,7 +11,7 @@ use OZiTAG\Tager\Backend\Rbac\Facades\UserAccessControl;
 class AuthUserOperation extends Operation
 {
     public function __construct(
-        protected int $client_id,
+        protected int|string $client_id,
         protected string $username,
         protected ?string $password = null,
         protected ?string $client_secret = null,

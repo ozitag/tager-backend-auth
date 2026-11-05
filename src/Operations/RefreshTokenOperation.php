@@ -15,7 +15,7 @@ class RefreshTokenOperation extends Operation
 
     public function __construct(
         protected string $refresh_token,
-        protected int $client_id,
+        protected int|string $client_id,
         protected ?string $client_secret = null
     ) {}
 

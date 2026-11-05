@@ -9,7 +9,7 @@ use OZiTAG\Tager\Backend\Core\Validation\Facades\Validation;
 class GetClientOrFailJob extends Job
 {
     public function __construct(
-        protected int $client_id,
+        protected int|string $client_id,
         protected ?string $client_secret = null,
         protected string $grant_type = 'password',
     ) {}

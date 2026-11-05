@@ -9,7 +9,7 @@ use OZiTAG\Tager\Backend\Core\Jobs\Operation;
 class GenerateTokensOperation extends Operation
 {
     public function __construct(
-        protected int $client_id,
+        protected int|string $client_id,
         protected int $user_id,
         protected array $scopes = []
     ) {}

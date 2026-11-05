@@ -11,10 +11,10 @@ use OZiTAG\Tager\Backend\Core\Jobs\Job;
 class GetAccessTokenJob extends Job
 {
     protected int $user_id;
-    protected int $client_id;
+    protected int|string $client_id;
     protected array $scopes;
 
-    public function __construct(int $user_id, int $client_id, array $scopes = [])
+    public function __construct(int $user_id, int|string $client_id, array $scopes = [])
     {
         $this->user_id = $user_id;
         $this->client_id = $client_id;

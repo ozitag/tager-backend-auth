@@ -3,6 +3,7 @@
 namespace OZiTAG\Tager\Backend\Auth\Http\Features;
 
 use Illuminate\Support\Facades\Config;
+use OZiTAG\Tager\Backend\Auth\Helpers\DefaultClient;
 use Illuminate\Support\Str;
 use OZiTAG\Tager\Backend\Auth\Events\TagerAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Facades\TagerAuth;
@@ -44,7 +45,7 @@ class YandexAuthFeature extends Feature
         ));
 
         list($accessToken, $refreshToken) = TagerAuth::authWithoutPassword(
-            $email, $request->get('clientId', 1),
+            $email, $request->get('clientId') ?: DefaultClient::id(),
             $request->get('clientSecret'),
         );
 

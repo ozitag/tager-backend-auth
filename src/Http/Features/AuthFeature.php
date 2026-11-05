@@ -3,6 +3,7 @@
 namespace OZiTAG\Tager\Backend\Auth\Http\Features;
 
 use Illuminate\Support\Facades\Config;
+use OZiTAG\Tager\Backend\Auth\Helpers\DefaultClient;
 use Illuminate\Support\Str;
 use OZiTAG\Tager\Backend\Auth\Events\TagerAuthRequest;
 use OZiTAG\Tager\Backend\Auth\Events\TagerSuccessAuthRequest;
@@ -38,7 +39,7 @@ class AuthFeature extends Feature
         list($accessToken, $refreshToken) = TagerAuth::auth(
             $request->get('password'),
             $request->get('email'),
-            $request->get('clientId', 1),
+            $request->get('clientId') ?: DefaultClient::id(),
             $request->get('clientSecret'),
         );
 

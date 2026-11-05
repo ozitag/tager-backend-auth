@@ -4,6 +4,7 @@ namespace OZiTAG\Tager\Backend\Auth\Http\Features;
 
 
 use OZiTAG\Tager\Backend\Auth\Facades\TagerAuth;
+use OZiTAG\Tager\Backend\Auth\Helpers\DefaultClient;
 use OZiTAG\Tager\Backend\Auth\Http\Requests\RefreshRequest;
 use OZiTAG\Tager\Backend\Auth\Http\Resources\OauthResource;
 use OZiTAG\Tager\Backend\Core\Features\Feature;
@@ -14,7 +15,7 @@ class RefreshFeature extends Feature
     {
         list($accessToken, $refreshToken) = TagerAuth::refresh(
             $request->get('refreshToken'),
-            $request->get('clientId', 1),
+            $request->get('clientId') ?: DefaultClient::id(),
             $request->get('clientSecret'),
         );
 

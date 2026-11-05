@@ -10,7 +10,7 @@ use OZiTAG\Tager\Backend\Core\Jobs\Job;
 class GetClientAccessTokenJob extends Job
 {
     public function __construct(
-        protected int $client_id, protected array $scopes = []
+        protected int|string $client_id, protected array $scopes = []
     ) {}
 
     public function handle(Grant $grant, AuthorizationServer $authorizationServer)

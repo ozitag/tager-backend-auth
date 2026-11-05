@@ -12,7 +12,7 @@ final class TagerAuthHelper
 {
     use JobDispatcherTrait;
 
-    public function auth(string $password, string $username, int $client_id, ?string $client_secret = null): array
+    public function auth(string $password, string $username, int|string $client_id, ?string $client_secret = null): array
     {
         return $this->run(AuthUserOperation::class, [
             'password' => $password,
@@ -22,7 +22,7 @@ final class TagerAuthHelper
         ]);
     }
 
-    public function authWithoutPassword(string $username, int $client_id, ?string $client_secret = null): array
+    public function authWithoutPassword(string $username, int|string $client_id, ?string $client_secret = null): array
     {
         return $this->run(AuthUserOperation::class, [
             'username' => $username,
@@ -32,7 +32,7 @@ final class TagerAuthHelper
         ]);
     }
 
-    public function refresh(string $refresh_token, int $client_id, ?string $client_secret = null): array
+    public function refresh(string $refresh_token, int|string $client_id, ?string $client_secret = null): array
     {
         return $this->run(RefreshTokenOperation::class, [
             'refresh_token' => $refresh_token,
@@ -41,7 +41,7 @@ final class TagerAuthHelper
         ]);
     }
 
-    public function clientAuth(int $client_id, string $client_secret): mixed
+    public function clientAuth(int|string $client_id, string $client_secret): mixed
     {
         return $this->run(AuthClientTokenOperation::class, [
             'client_secret' => $client_secret,
